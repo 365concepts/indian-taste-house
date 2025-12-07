@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { 
   Menu, X, TrendingUp, Users, Heart, ShieldCheck, 
   Zap, Coffee, ArrowRight, Award, Target, MessageCircle,
-  ShoppingBag, Layers
+  ShoppingBag, Layers, BookOpen, Link as LinkIcon
 } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer,
   ScatterChart, Scatter, ZAxis, Cell
 } from 'recharts';
 
-// --- Color Palette Constants (Derived from Document) ---
+// --- Color Palette Constants ---
 const COLORS = {
   purple: '#7E22CE', // Electric Purple
   teal: '#14B8A6',   // Teal
@@ -30,10 +30,32 @@ const marketGrowthData = [
 ];
 
 const competitorMatrixData = [
-  { x: 20, y: 30, z: 200, name: 'MDH/Everest', type: 'Legacy', fill: '#EF4444' }, // Low Emotion, Low Trust (Modern Context)
+  { x: 20, y: 30, z: 200, name: 'MDH/Everest', type: 'Legacy', fill: '#EF4444' },
   { x: 30, y: 50, z: 200, name: 'Tata/Red Label', type: 'Mass', fill: '#10B981' },
   { x: 80, y: 80, z: 100, name: 'Chaayos/Vahdam', type: 'Premium', fill: '#F59E0B' },
-  { x: 90, y: 90, z: 300, name: 'Indian Taste House', type: 'Target', fill: COLORS.purple }, // High Emotion, High Trust
+  { x: 90, y: 90, z: 300, name: 'Indian Taste House', type: 'Target', fill: COLORS.purple },
+];
+
+const citationsData = [
+  { id: 1, title: "Top 10 Packaging Design Trends in India in 2024", source: "Designtheme Innoventics", link: "https://designatheme.net/top-10-packaging-design-trends-in-india-in-2024/" },
+  { id: 2, title: "The Chaayos Cup of Desi Success", source: "The Hard Copy", link: "https://thehardcopy.co/the-chaayos-cup-of-desi-success/" },
+  { id: 3, title: "TOP 20 Spice Marketing Statistics 2025", source: "Amra And Elma LLC", link: "https://www.amraandelma.com/spice-marketing-statistics/" },
+  { id: 4, title: "MDH Controversy: The King of Masala is Under the Scanner", source: "AB Academies", link: "https://www.abacademies.org/articles/mdh-controversy-the-king-of-masala-is-under-the-scanner-in-international-markets-17155.html" },
+  { id: 5, title: "What Are The Latest Trends In The Spices Market In India?", source: "IBEF India", link: "https://sites.google.com/view/ibefindia/article/what-are-the-latest-trends-in-the-spices-market-in-india" },
+  { id: 6, title: "Emergence of Masstige Marketing in India", source: "Slideshare", link: "https://www.slideshare.net/slideshow/masstige-marketing-rese/44404392" },
+  { id: 7, title: "5 Key Consumer Segments in India", source: "Kadence", link: "https://kadence.com/en-us/knowledge/5-key-consumer-segments-in-india/" },
+  { id: 8, title: "Why the Indian Spice Market Is Heating Up in 2025?", source: "Torg", link: "https://usetorg.com/blog/indian-spice-market" },
+  { id: 9, title: "The Whole Truth Brand Success", source: "Velocity Blog", link: "https://blog.velocity.in/the-whole-truth-brand-success/" },
+  { id: 10, title: "Paper Boat: Emotional Branding & Nostalgia", source: "KTPL Blog", link: "https://blog.kirnanitechnologies.com/paper-boat-emotional-branding-nostalgia-in-packaging-design/" },
+  { id: 11, title: "Shri Mahila Griha Udyog Lijjat Papad", source: "Wikipedia", link: "https://en.wikipedia.org/wiki/Shri_Mahila_Griha_Udyog_Lijjat_Papad" },
+  { id: 12, title: "Target Market of Tata Consumer Products", source: "SWOT Analysis Example", link: "https://swotanalysisexample.com/blogs/target-market/tataconsumer-target-market" },
+  { id: 13, title: "Packaging Vahdam Spices for a Global Market", source: "Packaging of the World", link: "https://packagingoftheworld.com/2024/12/packaging-vahdam-spices-for-a-global-market.html" },
+  { id: 14, title: "Packaged spices and seasonings gaining traction", source: "Mintel", link: "https://www.mintel.com/press-centre/packaged-spices-and-seasonings-are-gaining-traction-in-india-with-millennials-as-a-key-consumer-target/" },
+  { id: 15, title: "How Purpose Foods and Q-Commerce Reshaped India's Food Sector", source: "Entrepreneur India", link: "https://www.entrepreneur.com/en-in/news-and-trends/how-purpose-foods-and-q-commerce-reshaped-indias-food/500390" },
+  { id: 16, title: "The Story | Tea | Brand", source: "Scribd", link: "https://www.scribd.com/document/639080766/Untitled" },
+  { id: 17, title: "Triangular Boxed Branding : Indian Snack Co", source: "Trend Hunter", link: "https://www.trendhunter.com/trends/indian-snack-co" },
+  { id: 18, title: "Packaging Design Trends for 2024 & 2025", source: "Qualprint", link: "https://qualprint.com/packaging-design-trends-for-2024-2025/" },
+  { id: 19, title: "Chai packaging trends for 2025", source: "MTPak Coffee", link: "https://mtpak.coffee/2025/09/chai-packaging-trends-2025/" },
 ];
 
 // --- Components ---
@@ -100,6 +122,7 @@ const App = () => {
     { id: 'visuals', label: 'Visual Identity', icon: Zap },
     { id: 'voice', label: 'Voice & Tone', icon: MessageCircle },
     { id: 'product', label: 'Product Strategy', icon: ShoppingBag },
+    { id: 'sources', label: 'Research Sources', icon: BookOpen },
   ];
 
   const scrollToSection = (id) => {
@@ -139,7 +162,7 @@ const App = () => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white pt-20 px-6 space-y-4 md:hidden">
+        <div className="fixed inset-0 z-40 bg-white pt-20 px-6 space-y-4 md:hidden overflow-y-auto">
           {sections.map(item => (
             <button 
               key={item.id}
@@ -160,7 +183,7 @@ const App = () => {
           </h1>
           <p className="text-xs text-gray-400 mt-2">Brand Manual & Intelligence</p>
         </div>
-        <nav className="flex-1 space-y-2">
+        <nav className="flex-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
           {sections.map(item => (
             <button
               key={item.id}
@@ -546,6 +569,39 @@ const App = () => {
                   "Guilt-Free Snacking". Protein-packed Chikki bars and "Yoga Snack" Makhana. 
                   Visuals: Pop Art Travel themes (Kerala Boat Race on Banana Chips).
                 </p>
+              </div>
+            </div>
+          </section>
+
+          {/* 9. Research Sources */}
+          <section id="sources">
+            <SectionHeader 
+              title="Research Sources" 
+              subtitle="Citations & Strategic References"
+              icon={BookOpen}
+              color={COLORS.teal}
+            />
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+              <div className="divide-y divide-gray-100">
+                {citationsData.map((item) => (
+                  <a 
+                    key={item.id} 
+                    href={item.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block p-4 hover:bg-gray-50 transition-colors flex items-start gap-4 group"
+                  >
+                    <div className="bg-teal-50 p-2 rounded-lg text-teal-600 group-hover:bg-teal-100 transition-colors shrink-0">
+                      <LinkIcon size={20} />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">
+                        {item.title}
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">{item.source}</p>
+                    </div>
+                  </a>
+                ))}
               </div>
             </div>
           </section>
