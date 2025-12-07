@@ -29,12 +29,3 @@
     "vite": "^4.4.5"
   }
 }
-```
-
-### Step 2: Push the file to GitHub
-Go to your terminal and run these commands to send the missing file to Vercel:
-
-```bash
-git add package.json
-git commit -m "Restoring package.json"
-git push
